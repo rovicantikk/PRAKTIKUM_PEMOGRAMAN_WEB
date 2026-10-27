@@ -1,0 +1,206 @@
+
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modul 2 - Web Portofolio Mahasiswa</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="main.js" defer></script>
+</head>
+
+<body>
+    <header>
+        <h1>Portofolio Pengembang Web</h1>
+        <nav>
+            <ul>
+                <li><a href="indexformulir.html">Beranda</a></li>
+                <li><a href="kontak.html">Hubungi Saya</a></li>
+                <li><a href="resume.html">Profile</a></li>
+                <li><a href="social.html">Social Media &amp; Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section id="tentang">
+            <h2>Tentang Saya</h2>
+            <p>
+                Halo! Saya Rovi Aulia, mahasiswa Teknik Informatika di
+                Institut Teknologi Garut. Saya memiliki ketertarikan dalam
+                pengembangan aplikasi web modern berbasis JavaScript dan Next.js.
+            </p>
+        </section>
+        <hr>
+        <section id="proyek">
+            <h2>Proyek Unggulan</h2>
+            <article>
+                <header>
+                    <h3>1. Sistem Manajemen Inventori Database</h3>
+                    <p>
+                        Teknologi: HTML, CSS, JavaScript, MySQL | Tahun:
+                        <time datetime="2026">2026</time>
+                    </p>
+                </header>
+                <p>
+                    Aplikasi web berbasis lokal untuk mencatat dan mengelola
+                    sirkulasi barang secara efisien terintegrasi dengan database
+                    MySQL.
+                </p>
+            </article>
+            <article>
+                <header>
+                    <h3>2. Aplikasi Kasir &amp; Perhitungan Transaksi</h3>
+                    <p>
+                        Teknologi: JavaScript ES6+ | Tahun:
+                        <time datetime="2026">2026</time>
+                    </p>
+                </header>
+                <p>
+                    Program logika pemrosesan transaksi belanja yang menghitung
+                    total bayar dan diskon berbasis Array of Objects.
+                </p>
+            </article>
+        </section>
+        <hr>
+        <section id="crud-proyek" class="crud-section">
+            <div class="crud-heading">
+                <div>
+                    <p class="crud-eyebrow">WORKSPACE / PROYEK</p>
+                    <h2>Kelola Proyek</h2>
+                    <p class="crud-description">
+                        Kelola data proyek, pantau status, dan atur anggaran
+                        dalam satu tempat.
+                    </p>
+                </div>
+                <span class="crud-heading-icon" aria-hidden="true">▦</span>
+            </div>
+            <div class="crud-statistik">
+                <article class="stat-card stat-purple">
+                    <span class="stat-icon" aria-hidden="true">▤</span>
+                    <p>Total Proyek</p>
+                    <strong id="crud-total">0</strong>
+                    <small>Seluruh proyek terdaftar</small>
+                </article>
+                <article class="stat-card stat-green">
+                    <span class="stat-icon" aria-hidden="true">✓</span>
+                    <p>Sudah Selesai</p>
+                    <strong id="crud-selesai">0</strong>
+                    <small>Proyek telah diselesaikan</small>
+                </article>
+                <article class="stat-card stat-orange">
+                    <span class="stat-icon" aria-hidden="true">◷</span>
+                    <p>Dalam Pengerjaan</p>
+                    <strong id="crud-proses">0</strong>
+                    <small>Proyek masih berjalan</small>
+                </article>
+            </div>
+            <div class="crud-panel">
+                <div class="crud-panel-heading">
+                    <div>
+                        <h3 id="crud-judul-form">Tambah Proyek Baru</h3>
+                        <p>Lengkapi informasi proyek di bawah ini.</p>
+                    </div>
+                    <span class="crud-number">01</span>
+                </div>
+                <form id="form-proyek-crud">
+                    <input type="hidden" id="crud-id">
+                    <div class="crud-form-grid">
+                        <div class="crud-field">
+                            <label for="crud-judul">Nama Proyek</label>
+                            <input
+                                type="text"
+                                id="crud-judul"
+                                placeholder="Contoh: Website UMKM"
+                                required
+                            >
+                        </div>
+                        <div class="crud-field">
+                            <label for="crud-kategori">Kategori Proyek</label>
+                            <select id="crud-kategori" required>
+                                <option value="">Pilih kategori</option>
+                                <option value="Web App">Web App</option>
+                                <option value="Mobile App">Mobile App</option>
+                                <option value="Desktop App">Desktop App</option>
+                                <option value="UI/UX Design">UI/UX Design</option>
+                            </select>
+                        </div>
+                        <div class="crud-field">
+                            <label for="crud-anggaran">
+                                Estimasi Anggaran (Rp)
+                            </label>
+                            <input
+                                type="number"
+                                id="crud-anggaran"
+                                placeholder="Contoh: 500000"
+                                min="1"
+                                step="1"
+                                required
+                            >
+                        </div>
+                    </div>
+                    <label class="crud-checkbox" for="crud-status">
+                        <input type="checkbox" id="crud-status">
+                        <span>Proyek sudah selesai</span>
+                    </label>
+                    <div class="crud-form-actions">
+                        <button
+                            type="submit"
+                            class="crud-btn-primary"
+                            id="crud-tombol-simpan"
+                        >
+                            + Tambah Proyek
+                        </button>
+                        <button
+                            type="button"
+                            class="crud-btn-secondary"
+                            id="crud-batal-edit"
+                            hidden
+                        >
+                            Batal Mengedit
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div class="crud-panel">
+                <div class="crud-panel-heading">
+                    <div>
+                        <h3>Daftar Proyek</h3>
+                        <p>Lihat detail dan kelola proyek yang tersimpan.</p>
+                    </div>
+                    <span class="crud-number">02</span>
+                </div>
+                <div class="crud-toolbar">
+                    <label class="crud-search" for="crud-cari">
+                        <span aria-hidden="true">⌕</span>
+                        <input
+                            type="search"
+                            id="crud-cari"
+                            placeholder="Cari nama proyek..."
+                        >
+                    </label>
+                    <span class="crud-storage-note">
+                        Data tersimpan di browser
+                    </span>
+                </div>
+                <div id="crud-daftar-proyek"></div>
+                <p id="crud-jumlah" class="crud-count">
+                    Menampilkan 0 proyek
+                </p>
+            </div>
+        </section>
+        <hr>
+        <section id="pekerjaan">
+            <h3>Status Pekerjaan</h3>
+            <p>
+                Saat ini terbuka untuk proyek freelance dan kolaborasi
+                pengembangan web.
+            </p>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2026 Portofolio Mahasiswa - All Rights Reserved.</p>
+    </footer>
+
+</body>
+</html>
