@@ -12,6 +12,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const formTitle = document.querySelector("#formTitle");
     const mhsTableBody = document.querySelector("#mhsTableBody");
     const alertMessage = document.querySelector("#alertMessage");
+    const searchInput = document.querySelector("#searchInput");
+    const totalMahasiswa = document.querySelector("#totalMahasiswa");
     let listMahasiswa = [];
     // Fungsi Pembantu Notifikasi Alert
     const showAlert = (text, type = "success") => {
@@ -21,44 +23,46 @@ document.addEventListener("DOMContentLoaded", () => {
         setTimeout(() => { alertMessage.style.display = "none"; }, 3000);
     };
 
-// 2. READ: Ambil Data Mahasiswa dari API Node.js
-const loadMahasiswa = async () => {
-    try {
-        const res = await fetch("/api/mahasiswa");
+    // 2. READ: Ambil Data Mahasiswa dari API Node.js
+    const loadMahasiswa = async () => {
+        try {
+            const res = await fetch("/api/mahasiswa");
 
-        if (!res.ok) {
-            const error = await res.json();
-            throw new Error(error.message || "Gagal mengambil data");
+            if (!res.ok) {
+                const error = await res.json();
+                throw new Error(error.message || "Gagal mengambil data");
+            }
+
+            listMahasiswa = await res.json();
+            renderTable(listMahasiswa);
+
+        } catch (err) {
+            console.error("Kesalahan READ:", err);
+            showAlert("Gagal memuat data: " + err.message, "error");
         }
+    };
 
-        listMahasiswa = await res.json();
-        renderTable(listMahasiswa);
+    // Tampilkan Data ke Tabel
+    const renderTable = (data) => {
+        mhsTableBody.innerHTML = "";
+        totalMahasiswa.textContent =
+            `Total Mahasiswa Terdaftar: ${listMahasiswa.length} Orang`;
 
-    } catch (err) {
-        console.error("Kesalahan READ:", err);
-        showAlert("Gagal memuat data: " + err.message, "error");
-    }
-};
-
-// Tampilkan Data ke Tabel
-const renderTable = (data) => {
-    mhsTableBody.innerHTML = "";
-
-    if (data.length === 0) {
-        mhsTableBody.innerHTML = `
+        if (data.length === 0) {
+            mhsTableBody.innerHTML = `
             <tr>
                 <td colspan="6" style="text-align:center; color:#64748b;">
                     Belum ada data mahasiswa tersimpan.
                 </td>
             </tr>
         `;
-        return;
-    }
+            return;
+        }
 
-    data.forEach((mhs, idx) => {
-        const tr = document.createElement("tr");
+        data.forEach((mhs, idx) => {
+            const tr = document.createElement("tr");
 
-        tr.innerHTML = `
+            tr.innerHTML = `
             <td>${idx + 1}</td>
             <td>${mhs.nim}</td>
             <td>${mhs.nama}</td>
@@ -72,9 +76,23 @@ const renderTable = (data) => {
             </td>
         `;
 
-        mhsTableBody.appendChild(tr);
+            mhsTableBody.appendChild(tr);
+        });
+    };
+
+    // Fitur Pencarian Real-Time
+    searchInput.addEventListener("input", () => {
+        const keyword = searchInput.value.toLowerCase();
+
+        const hasilPencarian = listMahasiswa.filter((mhs) => {
+            return (
+                mhs.nama.toLowerCase().includes(keyword) ||
+                mhs.nim.toLowerCase().includes(keyword)
+            );
+        });
+
+        renderTable(hasilPencarian);
     });
-};
 
     // 3. CREATE & UPDATE: Submit Formulir
     mhsForm.addEventListener("submit", async (e) => {
@@ -87,6 +105,20 @@ const renderTable = (data) => {
         };
         const id = mhsIdInput.value;
         const isEdit = Boolean(id);
+
+        // Validasi NIM Duplikat
+        const nimDuplikat = listMahasiswa.some((mhs) => {
+            return (
+                mhs.nim === payload.nim &&
+                (!isEdit || Number(mhs.id) !== Number(id))
+            );
+        });
+
+        if (nimDuplikat) {
+            showAlert("NIM sudah terdaftar!", "error");
+            return;
+        }
+
         const url = isEdit ? `/api/mahasiswa/${id}` : "/api/mahasiswa";
         const method = isEdit ? "PUT" : "POST";
         try {
